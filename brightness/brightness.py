@@ -3,19 +3,21 @@
 #   author: rmNULL
 #   License: https://opensource.org/licenses/MIT
 #
-#   brightness.py
-#       a simple utility to manage brightness of macbook's display (might work
-#       for other (intel) devices too(I haven't tested). This
-#       tool is inspired from hobarrera's kbdlight (https://github.com/hobarrera/kbdlight)
+'''brightness.py - a simple utility to manage brightness of macbook's display (might work
+    for other (intel) devices too(I haven't tested). This
+    tool is inspired from hobarrera's kbdlight (https://github.com/hobarrera/kbdlight)'''
 
 #   Note: the changes made to the brightness are relative.
 #   TODO: maybe rename it to display_stat or bright or something?
 
+from __future__ import print_function
 import sys
 
+
 def usage():
-    print "usage: %s [up [<percentage>] || down [<percentage>] || off || max || get || set <value>]" % sys.argv[0]
+    print("usage: %s [up [<percentage>] || down [<percentage>] || off || max || get || set <value>]" % sys.argv[0])
     sys.exit(0)
+
 
 def main(args):
     bn_dir = "/sys/class/backlight/intel_backlight/"
@@ -29,8 +31,7 @@ def main(args):
     except IOError:
         sys.stderr.write("failed to open %s\n" % bn_file)
         sys.exit(1)
-    
-    
+
     if args[0] == "up" or args[0] == "down":
         try:
             percent = int(args[1])
@@ -42,7 +43,7 @@ def main(args):
         except IndexError:
             percent = 10
 
-	change = (current * percent) / 100
+        change = (current * percent) / 100
     elif args[0] == "off":
         change = -int(current)
     elif args[0] == "max":
@@ -54,25 +55,25 @@ def main(args):
 
         change = top - current
     elif args[0] == "get":
-        print "brightness: %s" % current
+        print("brightness: %s" % current)
         sys.exit(0)
     elif args[0] == "set":
-	try:
-	    change = int(args[1])
-	except IndexError:
-	    usage()
-	    # not sure how good idea this is (using xrange to check bounds)
-	    if not change in xrange(101):
-		sys.stdout.write("value must be a number between 0 and 100.\n")
-		usage()
-        current = 0 # normalize
+        try:
+            change = int(args[1])
+        except IndexError:
+            usage()
+            # not sure how good idea this is (using xrange to check bounds)
+            if change not in xrange(101):
+                sys.stdout.write("value must be a number between 0 and 100.\n")
+                usage()
+        current = 0  # normalize
     else:
         usage()
 
     if args[0] == "down":
-        change *= -1;
+        change *= -1
 
-    print current + change
+    print(current + change)
     new = current + change if current + change < 100 else 100
 
     try:
@@ -85,7 +86,8 @@ def main(args):
 if __name__ == "__main__":
 
     args = sys.argv[1:]
-    if (len(args) == 0):
+    if len(args) == 0:
         usage()
 
     main(args)
+
