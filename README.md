@@ -9,3 +9,4 @@ TO-DO
 - Improve The README.
 - Ask #etc's members to migrate their short scripts here.
 - Create a file that keeps list of available scripts.
+- Write a DESCRIPTION/README for every script.
