@@ -3,38 +3,51 @@
 # 	from a given directory.
 #
 # @author	:rmNULL
-# @version	:0.0.2
 # @license	:public
 #
 # TODO: 
 #  1. Add support for recursive deletion.
 #  2. Improve interactive mode interface.
-
+#  3. Deal with directories and links.
 require 'digest'
 require 'optparse'
 
+def possible_dups(dir)
+        files = {}
+
+        Dir.foreach(dir) do |f|
+                f = File.join(dir, f)
+                size = File.size? f
+                next if File.directory? f || size
+
+                unless files[size]
+                        files[size] = f
+                else
+                        yield files[size], f
+                end
+        end
+end
+
 def find_dups(dir)
-	dups = []
-	files = {}
+        dups = []
 	md5 = Digest::MD5.new
 
 	return unless File.directory? dir
 
-	Dir.foreach(dir) do |f|
-		f = File.join(dir, f)
-		next if File.directory? f
+        possible_dups(dir) do |f1, f2|
 
-		hash = md5.file(f).hexdigest
+		org = md5.file(f1).hexdigest
 		md5.reset
 
-		unless files[hash]
-			files[hash] = f
-		else
-			dups << f
-		end
+                possible_dup = md5.file(f2).hexdigest
+                md5.reset
+
+                if org == possible_dup
+                        dups << dup
+                end
 	end
 
-	return dups
+	dups
 end
 
 args = {}
