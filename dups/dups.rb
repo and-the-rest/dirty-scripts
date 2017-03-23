@@ -53,11 +53,15 @@ end
 args = {}
 arguments = OptionParser.new do |arg|
 
-	# i hate doing this.
-	arg.banner = <<USAGE
-\e[33m#{__FILE__}\e[0m: A simple utility to remove duplicates from a given directory.
+        RESET = "\e[0m"
+        YELLOW = "\e[33m"
+        BOLD = "\e[01m"
 
-\e[1mUsage\e[0m: #{__FILE__} [options]...
+	# hate doing this.
+	arg.banner = <<USAGE
+#{YELLOW}#{__FILE__}#{RESET}: A simple utility to remove duplicates from a given directory.
+
+#{BOLD}Usage#{RESET}: #{__FILE__} [options]...
 
 Options:
 USAGE
